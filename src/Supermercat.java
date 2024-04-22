@@ -1,11 +1,19 @@
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
+
 
 class Supermercat {
     static Scanner sc = new Scanner(System.in);
 
     //Arraylist on guardarem els productes amb un maxim de 100.
     static ArrayList<Producte> carreto = new ArrayList<Producte>(100);
+    public void exclusioArray(String ca) throws Exception {
+        if (carreto.size() >= 100) {
+            throw new Exception("No pots afegir més de 100 productes al carreto.");
+        }
+    }
 
     public static void main(String[] args) {
         menuTiquet();
@@ -34,7 +42,7 @@ class Supermercat {
                 passarCaixa();
                 break;
             case 3:
-                //mostrarCarret();
+                mostrarCarret();
                 break;
             case 0:
                 System.out.println("Sortint");
@@ -86,17 +94,32 @@ class Supermercat {
 
         System.out.println("Nom producte: ");
         String nom = sc.nextLine();
-        System.out.println("Codi de barres: ");
+
+        //Validacio perque el codi de barres ha de tenir 6 caracters.
+        System.out.println("Codi de barres: (6 caracters) ");
         String codiBarres = sc.nextLine();
+        while (codiBarres.length() != 6) {
+            System.out.println("El codi de barres ha de tenir 6 caràcters.");
+            System.out.println("Codi de barres: (6 caracters) ");
+            codiBarres = sc.nextLine();
+        }
+
+        //Validacio perque el preu no pot ser negatiu
         System.out.println("Preu: ");
         int preu = sc.nextInt();
-
         sc.nextLine();
+        while (preu <= 0) {
+            System.out.println("El preu no pot ser negatiu o amb valor 0, torna a provar.");
+            System.out.println("Preu: ");
+            preu = sc.nextInt();
+
+            sc.nextLine();
+        }
 
         System.out.println("Composicio del producte: ");
         String composicio = sc.nextLine();
 
-        textil t = new textil(nom, codiBarres, preu, composicio);
+            textil t = new textil(nom, codiBarres, preu, composicio);
         carreto.add(t);
         menuTiquet();
     }
@@ -108,17 +131,43 @@ class Supermercat {
 
         System.out.println("Nom producte: ");
         String nom = sc.nextLine();
-        System.out.println("Codi de barres: ");
+
+        //Validacio perque el codi de barres ha de tenir 6 caracters.
+        System.out.println("Codi de barres: (6 caracters) ");
         String codiBarres = sc.nextLine();
+        while (codiBarres.length() != 6) {
+            System.out.println("El codi de barres ha de tenir 6 caràcters.");
+            System.out.println("Codi de barres: (6 caracters) ");
+            codiBarres = sc.nextLine();
+        }
+
+        //Validacio perque el preu no pot ser negatiu
         System.out.println("Preu: ");
         int preu = sc.nextInt();
-
         sc.nextLine();
+        while (preu <= 0) {
+            System.out.println("El preu no pot ser negatiu o amb valor 0, torna a provar.");
+            System.out.println("Preu: ");
+            preu = sc.nextInt();
 
-        System.out.println("Data de caducitat(dd/MM/yyyy): ");
-        String dataCaducitat = sc.nextLine();
+            sc.nextLine();
+        }
 
-        alimentacio a = new alimentacio(nom, codiBarres, preu, dataCaducitat);
+        //Validacio perque la data de caducitat no pot ser avui o anterior.
+        System.out.println("Data de caducitat (dd/MM/yyyy): ");
+        String dataCaducitatStr = sc.nextLine();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate dataCaducitat = LocalDate.parse(dataCaducitatStr, formatter);
+
+        LocalDate avui = LocalDate.now();
+        while (!dataCaducitat.isAfter(avui)) {
+            System.out.println("La data de caducitat no pot ser avui o anterior a avui.");
+            System.out.println("Data de caducitat (dd/MM/yyyy): ");
+            dataCaducitatStr = sc.nextLine();
+            dataCaducitat = LocalDate.parse(dataCaducitatStr, formatter);
+        }
+
+        alimentacio a = new alimentacio(nom, codiBarres, preu, dataCaducitatStr);
         carreto.add(a);
         menuTiquet();
     }
@@ -130,15 +179,38 @@ class Supermercat {
 
         System.out.println("Nom producte: ");
         String nom = sc.nextLine();
-        System.out.println("Codi de barres: ");
+
+        //Validacio perque el codi de barres ha de tenir 6 caracters.
+        System.out.println("Codi de barres: (6 caracters) ");
         String codiBarres = sc.nextLine();
+        while (codiBarres.length() != 6) {
+            System.out.println("El codi de barres ha de tenir 6 caràcters.");
+            System.out.println("Codi de barres: (6 caracters) ");
+            codiBarres = sc.nextLine();
+        }
+
+        //Validacio perque el preu no pot ser negatiu
         System.out.println("Preu: ");
         int preu = sc.nextInt();
-
         sc.nextLine();
+        while (preu <= 0) {
+            System.out.println("El preu no pot ser negatiu o amb valor 0, torna a provar.");
+            System.out.println("Preu: ");
+            preu = sc.nextInt();
 
+            sc.nextLine();
+        }
+
+        //Validacio perque la garantia no pot ser negativa
         System.out.println("Garantia(dies): ");
         int garantia = sc.nextInt();
+        sc.nextLine();
+        while (garantia <= 0) {
+            System.out.println("La garantia no pot ser negativa o amb valor 0, torna a provar.");
+            System.out.println("Garantia(dies): ");
+            garantia = sc.nextInt();
+            sc.nextLine();
+        }
 
         electronica e = new electronica(nom, codiBarres, preu, garantia);
         carreto.add(e);
@@ -189,4 +261,25 @@ class Supermercat {
         menuTiquet();
     }
 
+    //Opció3 Mostrar carret de la compra
+    public static void mostrarCarret() {
+        HashMap<Producte, Integer> carret = new HashMap<>();
+
+        // Agafem la llista de productes i actualitzem el carret
+        for (Producte producte : carreto) {
+            if (carret.containsKey(producte)) {
+                carret.put(producte, carret.get(producte) + 1);
+            } else {
+                carret.put(producte, 1);
+            }
+        }
+
+        // Mostrar els productes i la quantitat
+        System.out.println("Carret: ");
+        for (Map.Entry<Producte, Integer> entry : carret.entrySet()) {
+            Producte producte = entry.getKey();
+            int quantitat = entry.getValue();
+            System.out.println(producte.getNom() + " -> " + quantitat);
+        }
+    }
 }

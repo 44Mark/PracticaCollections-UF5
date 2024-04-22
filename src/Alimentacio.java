@@ -7,27 +7,38 @@ class alimentacio extends Producte {
 
     String dataCaducitat;
 
+
     public alimentacio(String nom, String codiBarres, int preu, String dataCaducitat) {
         super(nom, codiBarres, preu);
         this.dataCaducitat = dataCaducitat;
     }
 
     @Override
-    public String getNom() {return this.nom;}
-
-    @Override
-    public String getCodiBarres() {return this.codiBarres;}
-
-    @Override
-    public int getPreu() {return calcularPreu();}
-
-    public int calcularPreu() {
-        DateTimeFormatter formetacio = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        LocalDate dataCaducitatDate = LocalDate.parse(this.dataCaducitat, formetacio);
-        LocalDate dataActual = LocalDate.now();
-        long diff = ChronoUnit.DAYS.between(dataActual, dataCaducitatDate);
-        return (int) (this.preu - (this.preu * (1 / (diff + 1))) + (this.preu * 0.1));
+    public String getNom() {
+        return this.nom;
     }
 
+    @Override
+    public String getCodiBarres() {
+        return this.codiBarres;
+    }
+
+    @Override
+    public int getPreu() {
+        return calcularPreu();
+    }
+
+    public int calcularPreu() {
+        // Li donem format a la data
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        //Agafa la variable dataCaducitat i li dona format Date
+        LocalDate dataCaducitatt = LocalDate.parse(this.dataCaducitat, formatter);
+        // Agafem el dia d'avui
+        LocalDate hoy = LocalDate.now();
+        // Calculem la diferencia de dies entre la data de caducitat i la data d'avui
+        long diff = ChronoUnit.DAYS.between(hoy, dataCaducitatt);
+        return (int) (this.preu - (this.preu * (1 / (diff + 1))) + (this.preu * 0.1));
+
+    }
 
 }
