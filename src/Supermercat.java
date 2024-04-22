@@ -156,32 +156,52 @@ class Supermercat {
         //Creem un hashmap anomenat carret per contar quantes vegades surt un producte en el carreto. String es el codi de barres
         // i int es el nombre de vegades que surt.
         HashMap<String, Integer> carret = new HashMap<String, Integer>();
-        //Bucle on revisa el codi de barres dels producte, si el codi esta guardat al carret sumara 1, sino el crea.
+
+        // Bucle per trobar el producte en l'Arraylist, si el producte esta sumara 1 sino el creara en el hasmap amb el valor 1.
         for (Producte producte : carreto) {
-            if (carret.containsKey(producte.getCodiBarres())) {
-                carret.put(producte.getCodiBarres(), carret.get(producte.getCodiBarres()) + 1);
+            String codiBarres = producte.getCodiBarres();
+            if (carret.containsKey(codiBarres)) {
+                // Si el prodicte ja esta en el carret, sumara 1 en el contador
+                carret.put(codiBarres, carret.get(codiBarres) + 1);
             } else {
-                carret.put(producte.getCodiBarres(), 1);
+                // Si no ho esta, afegirem el producte amb quantitat = 1.
+                carret.put(codiBarres, 1);
             }
         }
-        //Bucle on recorre el hashmap, per cada producte del hasmap el comparara amb cada producte del carreto(ArrayList), si el codi de barres
-        // del producte del hashmap es igual al codi de barres d'un producte del carreto, mostrara el nom del producte, el nombre de vegades que surt,
-        // el preu per unitat i el preu total per aquest producte. Finalment enteja la llista
+
         int total = 0;
+        // Hashet per guardar els productes ja mostrats
+        HashSet<String> codisAfeg = new HashSet<>();
+
+        // Bucle per llegir el HashMap i mostrar els detalls del producte.
         for (Map.Entry<String, Integer> entry : carret.entrySet()) {
-            for (Producte producte : carreto) {
-                if (producte.getCodiBarres().equals(entry.getKey())) {
-                    System.out.println(producte.getNom() + " -> " + entry.getValue() + " unitat/s -> " + producte.getPreu() + "€/unitat -> " + producte.getPreu() * entry.getValue() + "€");
-                    total += producte.getPreu() * entry.getValue();
+            String codiBarres = entry.getKey();
+            int quantitat = entry.getValue();
+
+            // Comprobació de si el codi ja esta afegit
+            if (!codisAfeg.contains(codiBarres)) {
+                // Afegim el codi
+                codisAfeg.add(codiBarres);
+
+                // Bucle para buscar el producto correspondiente en el carrito y mostrar sus detalles
+                for (Producte producte : carreto) {
+                    if (producte.getCodiBarres().equals(codiBarres)) {
+                        System.out.println(producte.getNom() + " -> " + quantitat + " unitat/s -> " + producte.getPreu() + "€/unitat -> " + producte.getPreu() * quantitat + "€");
+                        total += producte.getPreu() * quantitat;
+                        break;
+                    }
                 }
             }
         }
+
         System.out.println("---------------");
         System.out.println("Total: " + total + "€");
 
         //Netejem Arraylist carreto i hashmap carret.
         carreto.clear();
         carret.clear();
+
+        //Tornem al menu principal.
         menuTiquet();
     }
 }
