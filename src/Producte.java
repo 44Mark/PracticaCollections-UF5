@@ -21,5 +21,17 @@ public abstract class Producte {
     public abstract int getPreu();
     public void setPreu(int preu) {this.preu = preu;}
 
-    //--------------------------------
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Producte producte = (Producte) obj;
+        return Objects.equals(codiBarres, producte.codiBarres) &&
+                preu == producte.preu;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(codiBarres, preu);
+    }
 }
