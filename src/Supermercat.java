@@ -1,6 +1,7 @@
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 
 
@@ -16,6 +17,7 @@ class Supermercat {
     }
 
     public static void main(String[] args) {
+
         menuTiquet();
     }
 
@@ -53,7 +55,7 @@ class Supermercat {
         }
     }
 
-    //L'user escull que tipus de producte vol introduir
+    //L'user escullira quin tipus de producte vol afegir.
     public static void introduirProducte() {
         System.out.println("---------------");
         System.out.println("--PRODUCTE---");
@@ -82,139 +84,153 @@ class Supermercat {
                 break;
             default:
                 System.out.println("Opció no vàlida, prova un altre cop");
+                System.out.println();
                 introduirProducte();
                 break;
         }
     }
 
-    //Metode per introduir productes de tipus textil
-    protected static void introduirTextil() {
-        System.out.println("Afegint textil: ");
-        System.out.println("Omple les següents dades: ");
-
-        System.out.println("Nom producte: ");
-        String nom = sc.nextLine();
-
-        //Validacio perque el codi de barres ha de tenir 6 caracters.
-        System.out.println("Codi de barres: (6 caracters) ");
-        String codiBarres = sc.nextLine();
-        while (codiBarres.length() != 6) {
-            System.out.println("El codi de barres ha de tenir 6 caràcters.");
-            System.out.println("Codi de barres: (6 caracters) ");
-            codiBarres = sc.nextLine();
-        }
-
-        //Validacio perque el preu no pot ser negatiu
-        System.out.println("Preu: ");
-        int preu = sc.nextInt();
-        sc.nextLine();
-        while (preu <= 0) {
-            System.out.println("El preu no pot ser negatiu o amb valor 0, torna a provar.");
-            System.out.println("Preu: ");
-            preu = sc.nextInt();
-
-            sc.nextLine();
-        }
-
-        System.out.println("Composicio del producte: ");
-        String composicio = sc.nextLine();
-
-            textil t = new textil(nom, codiBarres, preu, composicio);
-        carreto.add(t);
-        menuTiquet();
-    }
-
     //Metode per introduir productes de tipus alimentació
     protected static void introduirAlimentacio() {
-        System.out.println("Afegint alimentació: ");
-        System.out.println("Omple les següents dades: ");
+        try {
+            System.out.println("Afegint alimentació: ");
+            System.out.println("Omple les següents dades: ");
 
-        System.out.println("Nom producte: ");
-        String nom = sc.nextLine();
+            System.out.println("Nom producte: ");
+            String nom = sc.nextLine();
 
-        //Validacio perque el codi de barres ha de tenir 6 caracters.
-        System.out.println("Codi de barres: (6 caracters) ");
-        String codiBarres = sc.nextLine();
-        while (codiBarres.length() != 6) {
-            System.out.println("El codi de barres ha de tenir 6 caràcters.");
+            // Validación para que el código de barras tenga 6 caracteres
             System.out.println("Codi de barres: (6 caracters) ");
-            codiBarres = sc.nextLine();
-        }
+            String codiBarres = sc.nextLine();
+            if (!codiBarres.matches("^\\d{6}$")) {
+                throw new IllegalArgumentException("El codi de barres ha de tenir 6 caràcters.");
+            }
 
-        //Validacio perque el preu no pot ser negatiu
-        System.out.println("Preu: ");
-        int preu = sc.nextInt();
-        sc.nextLine();
-        while (preu <= 0) {
-            System.out.println("El preu no pot ser negatiu o amb valor 0, torna a provar.");
+            // Validación para que el precio no sea negativo
             System.out.println("Preu: ");
-            preu = sc.nextInt();
-
+            int preu = sc.nextInt();
             sc.nextLine();
-        }
+            if (preu <= 0) {
+                throw new IllegalArgumentException("El preu no pot ser negatiu o amb valor 0, torna a provar.");
+            }
 
-        //Validacio perque la data de caducitat no pot ser avui o anterior.
-        System.out.println("Data de caducitat (dd/MM/yyyy): ");
-        String dataCaducitatStr = sc.nextLine();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        LocalDate dataCaducitat = LocalDate.parse(dataCaducitatStr, formatter);
-
-        LocalDate avui = LocalDate.now();
-        while (!dataCaducitat.isAfter(avui)) {
-            System.out.println("La data de caducitat no pot ser avui o anterior a avui.");
+            // Validació perque la data de caducitat no sigui avui o anterior.
             System.out.println("Data de caducitat (dd/MM/yyyy): ");
-            dataCaducitatStr = sc.nextLine();
-            dataCaducitat = LocalDate.parse(dataCaducitatStr, formatter);
-        }
+            String dataCaducitatStr = sc.nextLine();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate dataCaducitat = LocalDate.parse(dataCaducitatStr, formatter);
+            LocalDate avui = LocalDate.now();
+            if (!dataCaducitat.isAfter(avui)) {
+                throw new IllegalArgumentException("La data de caducitat no pot ser avui o anterior a avui.");
+            }
 
-        alimentacio a = new alimentacio(nom, codiBarres, preu, dataCaducitatStr);
-        carreto.add(a);
-        menuTiquet();
+            // Si tot esta bé crearem l'objecte
+            alimentacio a = new alimentacio(nom, codiBarres, preu, dataCaducitatStr);
+            carreto.add(a);
+
+        } catch (DateTimeParseException | IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
+        } finally {
+            System.out.println();
+            System.out.println("Torna a provar");
+            System.out.println();
+
+            menuTiquet();
+        }
     }
+
+    //Metode per introduir productes de tipus textil
+    protected static void introduirTextil() {
+        try {
+            System.out.println("Afegint textil: ");
+            System.out.println("Omple les següents dades: ");
+
+            System.out.println("Nom producte: ");
+            String nom = sc.nextLine();
+
+            // Validación para que el código de barras tenga 6 caracteres
+            System.out.println("Codi de barres: (6 caracters) ");
+            String codiBarres = sc.nextLine();
+            if (!codiBarres.matches("^\\d{6}$")) {
+                throw new IllegalArgumentException("El codi de barres ha de tenir 6 caràcters.");
+            }
+
+            // Validación para que el precio no sea negativo
+            System.out.println("Preu: ");
+            int preu = sc.nextInt();
+            sc.nextLine();
+            if (preu <= 0) {
+                throw new IllegalArgumentException("El preu no pot ser negatiu o amb valor 0, torna a provar.");
+            }
+
+            System.out.println("Composicio del producte: ");
+            String composicio = sc.nextLine();
+
+            // Crear el objeto 'textil' si las validaciones son exitosas
+            textil t = new textil(nom, codiBarres, preu, composicio);
+            carreto.add(t);
+
+        } catch (IllegalArgumentException e) {
+            // Capturar excepciones de validación
+            System.out.println("Error: " + e.getMessage());
+        } finally {
+            // Mostrar mensaje y volver a solicitar la entrada del producto
+            System.out.println();
+            System.out.println("Torna a provar");
+            System.out.println();
+
+            menuTiquet();
+        }
+    }
+
 
     //Metode per introduir productes de tipus electrònica
     protected static void introduirElectronica() {
-        System.out.println("Afegint electrònica: ");
-        System.out.println("Omple les següents dades: ");
+        try {
+            System.out.println("Afegint electrònica: ");
+            System.out.println("Omple les següents dades: ");
 
-        System.out.println("Nom producte: ");
-        String nom = sc.nextLine();
+            System.out.println("Nom producte: ");
+            String nom = sc.nextLine();
 
-        //Validacio perque el codi de barres ha de tenir 6 caracters.
-        System.out.println("Codi de barres: (6 caracters) ");
-        String codiBarres = sc.nextLine();
-        while (codiBarres.length() != 6) {
-            System.out.println("El codi de barres ha de tenir 6 caràcters.");
+            // Validación para que el código de barras tenga 6 caracteres
             System.out.println("Codi de barres: (6 caracters) ");
-            codiBarres = sc.nextLine();
-        }
+            String codiBarres = sc.nextLine();
+            if (!codiBarres.matches("^\\d{6}$")) {
+                throw new IllegalArgumentException("El codi de barres ha de tenir 6 caràcters.");
+            }
 
-        //Validacio perque el preu no pot ser negatiu
-        System.out.println("Preu: ");
-        int preu = sc.nextInt();
-        sc.nextLine();
-        while (preu <= 0) {
-            System.out.println("El preu no pot ser negatiu o amb valor 0, torna a provar.");
+            // Validación para que el precio no sea negativo
             System.out.println("Preu: ");
-            preu = sc.nextInt();
-
+            int preu = sc.nextInt();
             sc.nextLine();
-        }
+            if (preu <= 0) {
+                throw new IllegalArgumentException("El preu no pot ser negatiu o amb valor 0, torna a provar.");
+            }
 
-        //Validacio perque la garantia no pot ser negativa
-        System.out.println("Garantia(dies): ");
-        int garantia = sc.nextInt();
-        sc.nextLine();
-        while (garantia <= 0) {
-            System.out.println("La garantia no pot ser negativa o amb valor 0, torna a provar.");
+            // Validación para que la garantía no sea negativa
             System.out.println("Garantia(dies): ");
-            garantia = sc.nextInt();
+            int garantia = sc.nextInt();
             sc.nextLine();
-        }
+            if (garantia <= 0) {
+                throw new IllegalArgumentException("La garantia no pot ser negativa o amb valor 0, torna a provar.");
+            }
 
-        electronica e = new electronica(nom, codiBarres, preu, garantia);
-        carreto.add(e);
-        menuTiquet();
+            // Crear el objeto 'electronica' si las validaciones son exitosas
+            electronica e = new electronica(nom, codiBarres, preu, garantia);
+            carreto.add(e);
+
+        } catch (IllegalArgumentException e) {
+
+            System.out.println("Error: " + e.getMessage());
+        } finally {
+
+            System.out.println();
+            System.out.println("Torna a provar");
+            System.out.println();
+
+            menuTiquet();
+        }
     }
 
     //Opcio2. L'usuari passa per caixa i dona el tiquet.

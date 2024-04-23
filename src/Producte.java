@@ -34,4 +34,13 @@ public abstract class Producte {
     public int hashCode() {
         return Objects.hash(codiBarres, preu);
     }
+
+    @Override
+    public String toString() {
+        return "Producte{" +
+                "nom='" + nom + '\'' +
+                ", codiBarres='" + codiBarres + '\'' +
+                ", preu=" + preu +
+                '}';
+    }
 }

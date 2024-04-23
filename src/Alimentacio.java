@@ -1,6 +1,5 @@
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.Scanner;
 import java.time.format.DateTimeFormatter;
 
 class alimentacio extends Producte {
@@ -40,5 +39,4 @@ class alimentacio extends Producte {
         return (int) (this.preu - (this.preu * (1 / (diff + 1))) + (this.preu * 0.1));
 
     }
-
 }
