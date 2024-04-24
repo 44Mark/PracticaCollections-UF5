@@ -1,5 +1,4 @@
 import java.util.*;
-import java.text.SimpleDateFormat;
 
 public abstract class Producte {
     String nom;
@@ -19,8 +18,11 @@ public abstract class Producte {
     public abstract String getCodiBarres();
     public void setCodiBarres(String codiBarres) {this.codiBarres = codiBarres;}
     public abstract int getPreu();
-    public void setPreu(int preu) {this.preu = preu;}
+    public int setPreu(int preu) {this.preu = preu;
+        return preu;
+    }
 
+    //El metode equals i hashcode serveix per comparar dos objectes de la mateixa classe
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -30,17 +32,10 @@ public abstract class Producte {
                 preu == producte.preu;
     }
 
+
     @Override
     public int hashCode() {
         return Objects.hash(codiBarres, preu);
     }
 
-    @Override
-    public String toString() {
-        return "Producte{" +
-                "nom='" + nom + '\'' +
-                ", codiBarres='" + codiBarres + '\'' +
-                ", preu=" + preu +
-                '}';
-    }
 }

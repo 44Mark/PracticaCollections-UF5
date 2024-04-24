@@ -13,4 +13,7 @@ class textil extends Producte {
     public String getCodiBarres() {return this.codiBarres;}
     @Override
     public int getPreu() {return this.preu;}
+    @Override
+    public int setPreu(int preu) {return this.preu = preu;}
+
 }

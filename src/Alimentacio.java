@@ -6,7 +6,6 @@ class alimentacio extends Producte {
 
     String dataCaducitat;
 
-
     public alimentacio(String nom, String codiBarres, int preu, String dataCaducitat) {
         super(nom, codiBarres, preu);
         this.dataCaducitat = dataCaducitat;
@@ -26,6 +25,8 @@ class alimentacio extends Producte {
     public int getPreu() {
         return calcularPreu();
     }
+    @Override
+    public int setPreu(int preu) {return this.preu = preu;}
 
     public int calcularPreu() {
         // Li donem format a la data

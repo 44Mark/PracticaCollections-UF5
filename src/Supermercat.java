@@ -132,7 +132,7 @@ class Supermercat {
             System.out.println("Error: " + e.getMessage());
         } finally {
             System.out.println();
-            System.out.println("Torna a provar");
+            System.out.println("Tornem al menu principal.");
             System.out.println();
 
             menuTiquet();
@@ -176,7 +176,7 @@ class Supermercat {
         } finally {
             // Mostrar mensaje y volver a solicitar la entrada del producto
             System.out.println();
-            System.out.println("Torna a provar");
+            System.out.println("Tornem al menu principal.");
             System.out.println();
 
             menuTiquet();
@@ -226,7 +226,7 @@ class Supermercat {
         } finally {
 
             System.out.println();
-            System.out.println("Torna a provar");
+            System.out.println("Tornem al menu principal.");
             System.out.println();
 
             menuTiquet();
