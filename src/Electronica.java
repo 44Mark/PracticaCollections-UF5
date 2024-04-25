@@ -3,10 +3,10 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Scanner;
 
-class electronica extends Producte {
+class Electronica extends Producte {
     int garantia;
 
-    public electronica(String nom, String codiBarres, int preu, int garantia) {
+    public Electronica(String nom, String codiBarres, int preu, int garantia) {
         super(nom, codiBarres, preu);
         this.garantia = garantia;
     }

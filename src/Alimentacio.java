@@ -2,11 +2,11 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.time.format.DateTimeFormatter;
 
-class alimentacio extends Producte {
+class Alimentacio extends Producte {
 
     String dataCaducitat;
 
-    public alimentacio(String nom, String codiBarres, int preu, String dataCaducitat) {
+    public Alimentacio(String nom, String codiBarres, int preu, String dataCaducitat) {
         super(nom, codiBarres, preu);
         this.dataCaducitat = dataCaducitat;
     }

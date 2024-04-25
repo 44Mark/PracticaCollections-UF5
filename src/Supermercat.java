@@ -125,7 +125,7 @@ class Supermercat {
             }
 
             // Si tot esta bé crearem l'objecte
-            alimentacio a = new alimentacio(nom, codiBarres, preu, dataCaducitatStr);
+            Alimentacio a = new Alimentacio(nom, codiBarres, preu, dataCaducitatStr);
             carreto.add(a);
 
         } catch (DateTimeParseException | IllegalArgumentException e) {
@@ -167,7 +167,7 @@ class Supermercat {
             String composicio = sc.nextLine();
 
             // Crear el objeto 'textil' si las validaciones son exitosas
-            textil t = new textil(nom, codiBarres, preu, composicio);
+            Textil t = new Textil(nom, codiBarres, preu, composicio);
             carreto.add(t);
 
         } catch (IllegalArgumentException e) {
@@ -217,7 +217,7 @@ class Supermercat {
             }
 
             // Crear el objeto 'electronica' si las validaciones son exitosas
-            electronica e = new electronica(nom, codiBarres, preu, garantia);
+            Electronica e = new Electronica(nom, codiBarres, preu, garantia);
             carreto.add(e);
 
         } catch (IllegalArgumentException e) {
@@ -290,12 +290,10 @@ class Supermercat {
             }
         }
 
-        // Mostrar els productes i la quantitat
+        // Mostrar els productes i la quantitat amb lambda
         System.out.println("Carret: ");
-        for (Map.Entry<Producte, Integer> entry : carret.entrySet()) {
-            Producte producte = entry.getKey();
-            int quantitat = entry.getValue();
-            System.out.println(producte.getNom() + " -> " + quantitat);
-        }
+        carret.forEach((p, q) -> {
+            System.out.println(p.getNom() + " -> " + q);
+        });
     }
 }
