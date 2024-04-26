@@ -4,7 +4,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.*;
 
-
 class Supermercat {
     static Scanner sc = new Scanner(System.in);
 
@@ -17,96 +16,111 @@ class Supermercat {
     }
 
     public static void main(String[] args) {
-
         menuTiquet();
     }
 
     //Primera pregunta que es fara a l'usuari sobre que vol fer a la nostra botiga.
     public static void menuTiquet() {
+        try {
+            System.out.println();
+            System.out.println("BENVINGUT AL SAPAMERCAT");
+            System.out.println("------------");
+            System.out.println("--INICI---");
+            System.out.println("------------");
+            System.out.println("Que vols fer?");
+            System.out.println();
 
-        System.out.println("BENVINGUT AL SAPAMERCAT");
-        System.out.println("------------");
-        System.out.println("--INICI---");
-        System.out.println("------------");
-        System.out.println("Que vols fer?");
-        System.out.println("1) Introduir producte");
-        System.out.println("2) Passar per caixa");
-        System.out.println("3) Mostrar carret de compra");
-        System.out.println("0) Acabar");
+            System.out.println("1) Introduir producte");
+            System.out.println("2) Passar per caixa");
+            System.out.println("3) Mostrar carret de compra");
+            System.out.println("0) Acabar");
 
-        int inici = sc.nextInt();
-        sc.nextLine();
-        switch (inici) {
-            case 1:
-                introduirProducte();
-                break;
-            case 2:
-                passarCaixa();
-                break;
-            case 3:
-                mostrarCarret();
-                break;
-            case 0:
-                System.out.println("Sortint");
-                break;
-            default:
-                System.out.println("Opció no vàlida, prova un altre cop");
-                menuTiquet();
+            if(!sc.hasNextInt()){
+                throw new InputMismatchException("Error, no pots posar una lletra. Torna a executar el programa.");}
+
+            int numero = sc.nextInt();
+            sc.nextLine();
+            switch (numero) {
+                case 1:
+                    introduirProducte();
+                    break;
+                case 2:
+                    passarCaixa();
+                    break;
+                case 3:
+                    mostrarCarret();
+                    break;
+                case 0:
+                    System.out.println("Sortint");
+                    break;
+                default:
+                    System.out.println("Opció no vàlida, prova un altre cop");
+                    menuTiquet();
+            }
+        } catch (InputMismatchException e) {
+            System.out.println(e.getMessage());
         }
     }
 
     //L'user escullira quin tipus de producte vol afegir.
     public static void introduirProducte() {
-        System.out.println("---------------");
-        System.out.println("--PRODUCTE---");
-        System.out.println("---------------");
-        System.out.println("1) Alimentació");
-        System.out.println("2) Tèxtil");
-        System.out.println("3) Electrònica");
-        System.out.println("0) Tornar");
+        try{
+            System.out.println();
+            System.out.println("---------------");
+            System.out.println("--PRODUCTE---");
+            System.out.println("---------------");
+            System.out.println("Escull un tipus de producte:");
+            System.out.println();
 
-        int tipusProducte = sc.nextInt();
-        sc.nextLine();
-        switch (tipusProducte) {
-            case 1:
-                introduirAlimentacio();
-                break;
-            case 2:
-                introduirTextil();
-                break;
-            case 3:
-                introduirElectronica();
-                break;
-            case 0:
-                System.out.println("Tornant...");
-                System.out.println();
-                menuTiquet();
-                break;
-            default:
-                System.out.println("Opció no vàlida, prova un altre cop");
-                System.out.println();
-                introduirProducte();
-                break;
-        }
+            System.out.println("1) Alimentació");
+            System.out.println("2) Tèxtil");
+            System.out.println("3) Electrònica");
+            System.out.println("0) Tornar");
+
+            if(!sc.hasNextInt()){
+                throw new InputMismatchException("Error, no pots posar una lletra. Torna a executar el programa.");}
+
+            int tipusProducte = sc.nextInt();
+            sc.nextLine();
+            switch (tipusProducte) {
+                case 1:
+                    introduirAlimentacio();
+                    break;
+                case 2:
+                    introduirTextil();
+                    break;
+                case 3:
+                    introduirElectronica();
+                    break;
+                case 0:
+                    System.out.println("Tornant...");
+                    menuTiquet();
+                    break;
+                default:
+                    System.out.println("Opció no vàlida, prova un altre cop");
+                    introduirProducte();
+            }
+        } catch (InputMismatchException e) {
+            System.out.println(e.getMessage());
+            }
     }
 
     //Metode per introduir productes de tipus alimentació
     protected static void introduirAlimentacio() {
         try {
-            System.out.println("Afegint alimentació: ");
             System.out.println("Omple les següents dades: ");
 
             System.out.println("Nom producte: ");
             String nom = sc.nextLine();
 
-            // Validación para que el código de barras tenga 6 caracteres
+            // Validació perque el codi de barres tingui 6 caracters
             System.out.println("Codi de barres: (6 caracters) ");
             String codiBarres = sc.nextLine();
             if (!codiBarres.matches("^\\d{6}$")) {
                 throw new IllegalArgumentException("El codi de barres ha de tenir 6 caràcters.");
             }
 
-            // Validación para que el precio no sea negativo
+            // Validació perque el preu no sigui negatiu o 0
             System.out.println("Preu: ");
             int preu = sc.nextInt();
             sc.nextLine();
@@ -131,10 +145,7 @@ class Supermercat {
         } catch (DateTimeParseException | IllegalArgumentException e) {
             System.out.println("Error: " + e.getMessage());
         } finally {
-            System.out.println();
             System.out.println("Tornem al menu principal.");
-            System.out.println();
-
             menuTiquet();
         }
     }
@@ -142,20 +153,19 @@ class Supermercat {
     //Metode per introduir productes de tipus textil
     protected static void introduirTextil() {
         try {
-            System.out.println("Afegint textil: ");
             System.out.println("Omple les següents dades: ");
 
             System.out.println("Nom producte: ");
             String nom = sc.nextLine();
 
-            // Validación para que el código de barras tenga 6 caracteres
+            // Validació perque el codi de barres tingui 6 caracters
             System.out.println("Codi de barres: (6 caracters) ");
             String codiBarres = sc.nextLine();
             if (!codiBarres.matches("^\\d{6}$")) {
                 throw new IllegalArgumentException("El codi de barres ha de tenir 6 caràcters.");
             }
 
-            // Validación para que el precio no sea negativo
+            // Validació perque el preu no sigui negatiu o 0
             System.out.println("Preu: ");
             int preu = sc.nextInt();
             sc.nextLine();
@@ -163,22 +173,17 @@ class Supermercat {
                 throw new IllegalArgumentException("El preu no pot ser negatiu o amb valor 0, torna a provar.");
             }
 
-            System.out.println("Composicio del producte: ");
+            System.out.println("Composició del producte: ");
             String composicio = sc.nextLine();
 
-            // Crear el objeto 'textil' si las validaciones son exitosas
+            // Si tot esta bé crearem l'objecte
             Textil t = new Textil(nom, codiBarres, preu, composicio);
             carreto.add(t);
 
         } catch (IllegalArgumentException e) {
-            // Capturar excepciones de validación
             System.out.println("Error: " + e.getMessage());
         } finally {
-            // Mostrar mensaje y volver a solicitar la entrada del producto
-            System.out.println();
             System.out.println("Tornem al menu principal.");
-            System.out.println();
-
             menuTiquet();
         }
     }
@@ -187,20 +192,19 @@ class Supermercat {
     //Metode per introduir productes de tipus electrònica
     protected static void introduirElectronica() {
         try {
-            System.out.println("Afegint electrònica: ");
             System.out.println("Omple les següents dades: ");
 
             System.out.println("Nom producte: ");
             String nom = sc.nextLine();
 
-            // Validación para que el código de barras tenga 6 caracteres
+            // Validació perque el codi de barres tingui 6 caracters
             System.out.println("Codi de barres: (6 caracters) ");
             String codiBarres = sc.nextLine();
             if (!codiBarres.matches("^\\d{6}$")) {
                 throw new IllegalArgumentException("El codi de barres ha de tenir 6 caràcters.");
             }
 
-            // Validación para que el precio no sea negativo
+            // Validació perque el preu no sigui negatiu o 0
             System.out.println("Preu: ");
             int preu = sc.nextInt();
             sc.nextLine();
@@ -208,7 +212,7 @@ class Supermercat {
                 throw new IllegalArgumentException("El preu no pot ser negatiu o amb valor 0, torna a provar.");
             }
 
-            // Validación para que la garantía no sea negativa
+            // Validació per la garantia no sigui negativa o 0
             System.out.println("Garantia(dies): ");
             int garantia = sc.nextInt();
             sc.nextLine();
@@ -216,30 +220,27 @@ class Supermercat {
                 throw new IllegalArgumentException("La garantia no pot ser negativa o amb valor 0, torna a provar.");
             }
 
-            // Crear el objeto 'electronica' si las validaciones son exitosas
+            // Si tot esta bé crearem l'objecte
             Electronica e = new Electronica(nom, codiBarres, preu, garantia);
             carreto.add(e);
 
         } catch (IllegalArgumentException e) {
-
             System.out.println("Error: " + e.getMessage());
         } finally {
-
-            System.out.println();
             System.out.println("Tornem al menu principal.");
-            System.out.println();
-
             menuTiquet();
         }
     }
 
     //Opcio2. L'usuari passa per caixa i dona el tiquet.
     public static void passarCaixa() {
+        System.out.println();
         System.out.println("---------------");
         System.out.println("SAPAMERCAT");
         System.out.println("---------------");
         System.out.println("Data: " + new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
         System.out.println("---------------");
+        System.out.println();
 
         // Creem un hashmap anomenat carret per contar quantes vegades surt un producte en el carreto.
         HashMap<Producte, Integer> carret = new HashMap<>();
@@ -291,7 +292,7 @@ class Supermercat {
         }
 
         // Mostrar els productes i la quantitat amb lambda
-        System.out.println("Carret: ");
+        System.out.println("Carreto de la compra: ");
         carret.forEach((p, q) -> {
             System.out.println(p.getNom() + " -> " + q);
         });

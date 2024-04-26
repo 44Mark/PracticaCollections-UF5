@@ -3,24 +3,20 @@ import java.time.temporal.ChronoUnit;
 import java.time.format.DateTimeFormatter;
 
 class Alimentacio extends Producte {
-
     String dataCaducitat;
 
     public Alimentacio(String nom, String codiBarres, int preu, String dataCaducitat) {
         super(nom, codiBarres, preu);
         this.dataCaducitat = dataCaducitat;
     }
-
     @Override
     public String getNom() {
         return this.nom;
     }
-
     @Override
     public String getCodiBarres() {
         return this.codiBarres;
     }
-
     @Override
     public int getPreu() {
         return calcularPreu();
@@ -38,6 +34,5 @@ class Alimentacio extends Producte {
         // Calculem la diferencia de dies entre la data de caducitat i la data d'avui
         long diff = ChronoUnit.DAYS.between(hoy, dataCaducitatt);
         return (int) (this.preu - (this.preu * (1 / (diff + 1))) + (this.preu * 0.1));
-
     }
 }

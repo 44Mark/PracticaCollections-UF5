@@ -20,6 +20,7 @@ class Electronica extends Producte {
     @Override
     public int setPreu(int preu) {return this.preu = preu;}
 
+    //Metode per calcular el preu del producte segons els dies de garantia
     public int calcularPreu() {
         return (int) (this.preu + (this.preu * (this.garantia / 365) * 0.1));
     }

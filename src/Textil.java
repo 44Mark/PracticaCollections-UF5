@@ -10,16 +10,14 @@ public class Textil extends Producte implements Comparable<Textil> {
 
     @Override
     public String getNom() {return this.nom;}
-
     @Override
     public String getCodiBarres() {return this.codiBarres;}
-
     @Override
     public int getPreu() {return this.preu;}
-
     @Override
     public int setPreu(int preu) {return this.preu = preu;}
 
+    //Comparable
     @Override
     public int compareTo(Textil o) {
         // Ordenar per composició
