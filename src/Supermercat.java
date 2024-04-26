@@ -62,7 +62,7 @@ class Supermercat {
             }
         } catch (InputMismatchException e) {
             System.out.println("Error: " + e.getMessage());
-            escriureExcepcions("Error al metode menuTiquet() -->" + e.getMessage());
+            escriureExcepcions("Error al mètode menuTiquet() -->" + e.getMessage());
         }
     }
 
@@ -106,11 +106,11 @@ class Supermercat {
             }
         } catch (InputMismatchException e) {
             System.out.println("Error: " + e.getMessage());
-            escriureExcepcions("Error al metode introduirProducte() -->" + e.getMessage());
+            escriureExcepcions("Error al mètode introduirProducte() -->" + e.getMessage());
             }
     }
 
-    //Metode per introduir productes de tipus alimentació
+    //mètode per introduir productes de tipus alimentació
     protected static void introduirAlimentacio() {
         try {
             System.out.println("Omple les següents dades: ");
@@ -147,13 +147,15 @@ class Supermercat {
             Alimentacio a = new Alimentacio(nom, codiBarres, preu, dataCaducitatStr);
             carreto.add(a);
 
+            menuTiquet();
+
         } catch (DateTimeParseException | IllegalArgumentException e) {
             System.out.println("Error: " + e.getMessage());
-            escriureExcepcions("Error al metode introduirAlimentacio() -->" + e.getMessage());
+            escriureExcepcions("Error al mètode introduirAlimentacio() -->" + e.getMessage());
         }
     }
 
-    //Metode per introduir productes de tipus textil
+    //mètode per introduir productes de tipus textil
     protected static void introduirTextil() {
         try {
             System.out.println("Omple les següents dades: ");
@@ -183,13 +185,15 @@ class Supermercat {
             Textil t = new Textil(nom, codiBarres, preu, composicio);
             carreto.add(t);
 
+            menuTiquet();
+
         } catch (IllegalArgumentException e) {
             System.out.println("Error: " + e.getMessage());
-            escriureExcepcions("Error al metode introduirTextil() -->" + e.getMessage());
+            escriureExcepcions("Error al mètode introduirTextil() -->" + e.getMessage());
         }
     }
 
-    //Metode per introduir productes de tipus electrònica
+    //mètode per introduir productes de tipus electrònica
     protected static void introduirElectronica() {
         try {
             System.out.println("Omple les següents dades: ");
@@ -224,59 +228,73 @@ class Supermercat {
             Electronica e = new Electronica(nom, codiBarres, preu, garantia);
             carreto.add(e);
 
+            menuTiquet();
+
         } catch (IllegalArgumentException e) {
             System.out.println("Error: " + e.getMessage());
-            escriureExcepcions("Error al metode introduirElectronica() -->" + e.getMessage());
+            escriureExcepcions("Error al mètode introduirElectronica() -->" + e.getMessage());
         }
     }
 
     //Opcio2. L'usuari passa per caixa i dona el tiquet.
     String ruta = "updates/UpdateTextilPrices.dat";
     public static void passarCaixa() {
-        System.out.println();
-        System.out.println("---------------");
-        System.out.println("SAPAMERCAT");
-        System.out.println("---------------");
-        System.out.println("Data: " + new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
-        System.out.println("---------------");
-        System.out.println();
+        try {
+            if (carreto.isEmpty())
+                throw new IllegalArgumentException("El carret està buit, no pots passar per caixa sense productes.");
 
-        // Creem un hashmap anomenat carret per contar quantes vegades surt un producte en el carreto.
-        HashMap<Producte, Integer> carret = new HashMap<>();
+            System.out.println();
+            System.out.println("---------------");
+            System.out.println("SAPAMERCAT");
+            System.out.println("---------------");
+            System.out.println("Data: " + new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
+            System.out.println("---------------");
+            System.out.println();
 
-        // Bucle per trobar el producte en l'ArrayList i actualitzar el carret.
-        for (Producte producte : carreto) {
-            if (carret.containsKey(producte)) {
-                // Si el producte esta en el carret, sumem 1
-                carret.put(producte, carret.get(producte) + 1);
-            } else {
-                // Si no esta l'afegim a 1.
-                carret.put(producte, 1);
+            // Creem un hashmap anomenat carret per contar quantes vegades surt un producte en el carreto.
+            HashMap<Producte, Integer> carret = new HashMap<>();
+
+            // Bucle per trobar el producte en l'ArrayList i actualitzar el carret.
+            for (Producte producte : carreto) {
+                if (carret.containsKey(producte)) {
+                    // Si el producte esta en el carret, sumem 1
+                    carret.put(producte, carret.get(producte) + 1);
+                } else {
+                    // Si no esta l'afegim a 1.
+                    carret.put(producte, 1);
+                }
             }
+
+            int total = 0;
+            // Bucle per llegir el HashMap i mostrar els detalls del producte.
+            for (Map.Entry<Producte, Integer> entry : carret.entrySet()) {
+                Producte producte = entry.getKey();
+                int quantitat = entry.getValue();
+
+                //Si el producte es de tipus Textil, comprovem el preu.
+                if (producte instanceof Textil) {
+                    comprovarPreuTextil(producte);
+                }
+                System.out.println(producte.getNom() + " -> " + quantitat + " unitat/s -> " + producte.getPreu() + "€/unitat -> " + producte.getPreu() * quantitat + "€");
+                total += producte.getPreu() * quantitat;
+            }
+
+            System.out.println("---------------");
+            System.out.println("Total: " + total + "€");
+
+            //Netejem Hashmap carret.
+            carret.clear();
+
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
+            escriureExcepcions("Error al mètode passarCaixa() -->" + e.getMessage());
+        } finally {
+            //Netejem Arraylist carreto.
+            carreto.clear();
         }
 
-        int total = 0;
-        // Bucle per llegir el HashMap i mostrar els detalls del producte.
-        for (Map.Entry<Producte, Integer> entry : carret.entrySet()) {
-            Producte producte = entry.getKey();
-            int quantitat = entry.getValue();
-
-            //Si el producte es de tipus Textil, comprovem el preu.
-            if(producte instanceof Textil){
-                comprovarPreuTextil(producte);
-            }
-            System.out.println(producte.getNom() + " -> " + quantitat + " unitat/s -> " + producte.getPreu() + "€/unitat -> " + producte.getPreu() * quantitat + "€");
-            total += producte.getPreu() * quantitat;
-        }
-
-        System.out.println("---------------");
-        System.out.println("Total: " + total + "€");
-
-        //Netejem Arraylist carreto i hashmap carret.
-        carreto.clear();
-        carret.clear();
     }
-    //Comprovar si l'arxiu UpdateTextilPrices.dat existeix sino el crea tant la carpeta com l'arxiu
+        //Comprovar si l'arxiu UpdateTextilPrices.dat existeix sino el crea tant la carpeta com l'arxiu
     private static void comprobarArxiuUpdate() throws IOException {
         boolean arx = true;
         boolean packkx = true;
@@ -295,7 +313,7 @@ class Supermercat {
             }
         } catch (IllegalArgumentException e) {
             System.out.println("Error: " + e.getMessage());
-            escriureExcepcions("Error al metode comprovarArxiuUpdate() -->" + e.getMessage());
+            escriureExcepcions("Error al mètode comprovarArxiuUpdate() -->" + e.getMessage());
         }
 
         //Si no existeix la carpeta ni l'arxiu, els creara
@@ -329,7 +347,7 @@ class Supermercat {
             }
         } catch (IllegalArgumentException e) {
             System.out.println("Error: " + e.getMessage());
-            escriureExcepcions("Error al metode comprovarArxiuLog() -->" + e.getMessage());
+            escriureExcepcions("Error al mètode comprovarArxiuLog() -->" + e.getMessage());
         }
 
         //Si no existeix la carpeta ni l'arxiu, els creara
@@ -344,7 +362,7 @@ class Supermercat {
         }
     }
 
-    //Metode per comprovar el preu dels textils al .dat
+    //mètode per comprovar el preu dels textils al .dat
     public static void comprovarPreuTextil(Producte p) {
         try {
             Scanner sca = new Scanner(new File("updates/UpdateTextilPrices.dat"));
@@ -366,31 +384,39 @@ class Supermercat {
             }
         } catch (IOException e) {
             System.out.println("Error: " + e.getMessage());
-            escriureExcepcions("Error al metode comprovarPreuTextil() -->" + e.getMessage());
+            escriureExcepcions("Error al mètode comprovarPreuTextil() -->" + e.getMessage());
         }
     }
 
     //Opció3 Mostrar carret de la compra
     public static void mostrarCarret() {
-        HashMap<Producte, Integer> carret = new HashMap<>();
+        try {
+            if (carreto.isEmpty())
+                throw new IllegalArgumentException("El carret està buit, no pots mostrar res perque no hi ha productes.");
+            HashMap<Producte, Integer> carret = new HashMap<>();
 
-        // Agafem la llista de productes i actualitzem el carret
-        for (Producte producte : carreto) {
-            if (carret.containsKey(producte)) {
-                carret.put(producte, carret.get(producte) + 1);
-            } else {
-                carret.put(producte, 1);
+            // Agafem la llista de productes i actualitzem el carret
+            for (Producte producte : carreto) {
+                if (carret.containsKey(producte)) {
+                    carret.put(producte, carret.get(producte) + 1);
+                } else {
+                    carret.put(producte, 1);
+                }
             }
-        }
 
-        // Mostrar els productes i la quantitat amb lambda
-        System.out.println("Carreto de la compra: ");
-        carret.forEach((p, q) -> {
-            System.out.println(p.getNom() + " -> " + q);
-        });
+            // Mostrar els productes i la quantitat amb lambda
+            System.out.println("Carreto de la compra: ");
+            carret.forEach((p, q) -> {
+                System.out.println(p.getNom() + " -> " + q);
+            });
+
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
+            escriureExcepcions("Error al mètode mostrarCarret() -->" + e.getMessage());
+        }
     }
 
-    //Metode per escriure tots els missatges de excepcions dins del meu arxiu /logs/Exceptions.dat
+    //mètode per escriure tots els missatges de excepcions dins del meu arxiu /logs/Exceptions.dat
     public static void escriureExcepcions(String missatge) {
         try {
             FileWriter ae = new FileWriter("logs/Exceptions.dat", true);
@@ -398,7 +424,7 @@ class Supermercat {
             ae.close();
         } catch (IOException e) {
             System.out.println("Error: " + e.getMessage());
-            escriureExcepcions("Error al metode escriureExcepcions() -->" + e.getMessage());
+            escriureExcepcions("Error al mètode escriureExcepcions() -->" + e.getMessage());
         }
     }
 }

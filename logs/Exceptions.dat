@@ -1,0 +1,17 @@
+Error al metode menuTiquet() -->Error, no pots posar una lletra. Torna a executar el programa.
+Error al metode introduirAlimentacio() -->El codi de barres ha de tenir maxim 15 caràcters.
+Error al metode introduirAlimentacio() -->El preu no pot ser negatiu o amb valor 0, torna a provar.
+Error al metode introduirAlimentacio() -->Text '20/20/2000' could not be parsed: Invalid value for MonthOfYear (valid values 1 - 12): 20
+Error al metode introduirAlimentacio() -->La data de caducitat no pot ser avui o anterior a avui.
+
+Error al metode introduirTextil() -->El codi de barres ha de tenir maxim 15 caràcters.
+Error al metode introduirTextil() -->El preu no pot ser negatiu o amb valor 0, torna a provar.
+Error al metode introduirElectronica() -->El codi de barres ha de tenir maxim 15 caràcters.
+Error al metode introduirElectronica() -->El preu no pot ser negatiu o amb valor 0, torna a provar.
+Error al metode introduirElectronica() -->La garantia no pot ser negativa o amb valor 0, torna a provar.
+
+Error al metode introduirProducte() -->Error, no pots posar una lletra. Torna a executar el programa.
+Error al mètode menuTiquet() -->Error, no pots posar una lletra. Torna a executar el programa.
+Error al mètode passarCaixa() -->El carret està buit, no pots passar per caixa sense productes.
+Error al mètode mostrarCarret() -->El carret està buit, no pots mostrar res perque no hi ha productes.
+Error al mètode menuTiquet() -->Error, no pots posar una lletra. Torna a executar el programa.
