@@ -17,7 +17,7 @@ public class Textil extends Producte implements Comparable<Textil> {
     @Override
     public int setPreu(int preu) {return this.preu = preu;}
 
-    //Comparable
+    //Comparable per composició
     @Override
     public int compareTo(Textil o) {
         // Ordenar per composició

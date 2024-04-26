@@ -36,6 +36,7 @@ Atribut de la subclasse;
 ### Mètodes:
 * Getters: Permeten accedir a la informació del producte.
 * Setters: Nom, codi de barres i data de caducitat són invariables. Només es pot actualitzar el preu.
+* Comparator per poder ordenar els productes per la seva garantia.
 * calcularPreu(): Calcula el preu del producte segons el període de garantia.
   * Agafara la garantia, si es superior a 2 anys aplicara un descompte del 10% al preu del producte.
   * Si es inferior a 2 anys aplicara un descompte del 5% al preu del producte.
@@ -50,13 +51,14 @@ Atribut de la subclasse;
 ### Mètodes:
 * Getters: Permeten accedir a la informació del producte.
 * Setters: Nom, codi de barres i data de caducitat són invariables. Només es pot actualitzar el preu.
+* Comparable per ordenar per composició
 
 
 # Classe Supermercat
 Classe Supermercat on estaran tots els mètodes per poder afegir productes, eliminar-los, mostrar-los, calcular el preu total de la compra, etc.
 
 Primer de tot tindrem un ArrayList de Productes on guardarem tots els productes que anem afegint amb un maxim de 100.
-### Mètode menuTiquet:
+### 1 Mètode menuTiquet:
 Aquest mètode mostrara 4 opcions: 
 1. introduirProducte(); -> Obrira un altre menu per escollir quin tipus de producte vols.
 2. passarCaixa(); -> Creara un tiquet amb tots els productes afegits i el preu total.
@@ -64,7 +66,7 @@ Aquest mètode mostrara 4 opcions:
 4. Sortir -> Sortira del programa.
 
 
-#### Mètode introduirProducte:
+### 1.1 Mètode introduirProducte:
 Aquest mètode mostrara 4 opcions per introduir productes:
 1. introduirAlimentacio(); -> Creara un producte de tipus alimentacio.
 2. introduirTextil(); -> Creara un producte de tipus textil.
@@ -72,27 +74,43 @@ Aquest mètode mostrara 4 opcions per introduir productes:
 4. Sortir -> Sortira al menu normal.
 
 
-#### Mètode passarCaixa:
+### 1.1.1 introduirAlimentacio:
+Mètode que demanara el nom, el codi de barres, el preu i la data de caducitat del producte, finalment afegira el producte al ArrayList.
+
+Tindra control d'errors per posar el codi de barres com a maxim 15 caracters, el preu no pot ser negatiu i la data de caducitat haura de ser superior a la data actual.
+
+
+### 1.1.2 introduirTextil:
+Mètode que demanara el nom, el codi de barres, el preu i la composicio del producte, finalment afegira el producte al ArrayList.
+
+Tindra control d'errors per posar el codi de barres com a maxim 15 caracters i el preu no pot ser negatiu.
+
+
+### 1.1.3 introduirElectronica:
+Mètode que demanara el nom, el codi de barres, el preu i els dies de garantia del producte, finalment afegira el producte al ArrayList.
+
+Tindra control d'errors per posar el codi de barres com a maxim 15 caracters i el preu i els dies de garantia no poden ser negatius.
+
+
+### 1.2 Mètode passarCaixa:
 Metode que utilitzara HashMap per mostrar el tiquet amb el nom del producte, la quantitat del producte afegit, el preu per unitat i el preu total del producte, finalment el total de tots els productes.
 
 
-#### Mètode mostrarCarret:
-Metode que mostrara tots els productes afegits al carreto, donara el nom i la quantitat de cada producte.
+### 2.1 Mètode comprobarArxiuUpdate:
+Metode que s'utilitza per comprobar si la carpeta update i l'arxiu UpdateTextilPrice.dat existeixen, sino els creara tant la carpeta com el .dat.
 
 
-##### introduirAlimentacio:
-Mètode que demanara el nom, el codi de barres, el preu i la data de caducitat del producte, finalment afegira el producte al ArrayList.
-
-Tindra control d'errors per posar el codi de barres amb 6 caracters, el preu no pot ser negatiu i a la data de caducitat haura de ser superior a la data actual.
+### 2.2 Mètode comprobarArxiuUpdate:
+Metode que s'utilitza per comprobar si la carpeta logs i l'arxiu Exceptions.dat existeixen, sino els creara tant la carpeta com el .dat.
 
 
-##### introduirTextil:
-Mètode que demanara el nom, el codi de barres, el preu i la composicio del producte, finalment afegira el producte al ArrayList.
-
-Tindra control d'errors per posar el codi de barres amb 6 caracters i el preu no pot ser negatiu.
+### 3 Mètode comprovarPreuTextil:
+Metode que agafara l'arxiu UpdateTextilPrice.dat i comprovara el codi de barres passat amb els codis de barres de l'arxiu, si coincideix i el preu es diferent fara un update del preu del producte.
 
 
-##### introduirElectronica:
-Mètode que demanara el nom, el codi de barres, el preu i els dies de garantia del producte, finalment afegira el producte al ArrayList.
+### 1.3 Mètode mostrarCarret:
+Metode que mostrara tots els productes afegits al carreto, donara el nom i la quantitat de cada producte amb lambda.
 
-Tindra control d'errors per posar el codi de barres amb 6 caracters i el preu i els dies de garantia no poden ser negatius.
+
+### 4 Mètode escriureExcepcions:
+Metode que selecciona l'arxiu Exceptions.dat dins de la carpeta logs per poder afegir tots els missatges dels catch.

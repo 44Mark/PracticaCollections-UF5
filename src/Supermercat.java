@@ -149,7 +149,7 @@ class Supermercat {
 
         } catch (DateTimeParseException | IllegalArgumentException e) {
             System.out.println("Error: " + e.getMessage());
-            escriureExcepcions("Error al metode introduirAlimentacio -->" + e.getMessage());
+            escriureExcepcions("Error al metode introduirAlimentacio() -->" + e.getMessage());
         }
     }
 
@@ -185,7 +185,7 @@ class Supermercat {
 
         } catch (IllegalArgumentException e) {
             System.out.println("Error: " + e.getMessage());
-            escriureExcepcions("Error al metode introduirTextil -->" + e.getMessage());
+            escriureExcepcions("Error al metode introduirTextil() -->" + e.getMessage());
         }
     }
 
@@ -226,7 +226,7 @@ class Supermercat {
 
         } catch (IllegalArgumentException e) {
             System.out.println("Error: " + e.getMessage());
-            escriureExcepcions("Error al metode introduirElectronica -->" + e.getMessage());
+            escriureExcepcions("Error al metode introduirElectronica() -->" + e.getMessage());
         }
     }
 
@@ -256,7 +256,6 @@ class Supermercat {
         }
 
         int total = 0;
-
         // Bucle per llegir el HashMap i mostrar els detalls del producte.
         for (Map.Entry<Producte, Integer> entry : carret.entrySet()) {
             Producte producte = entry.getKey();
@@ -277,8 +276,8 @@ class Supermercat {
         carreto.clear();
         carret.clear();
     }
-    //Comprovar si l'arxiu UpdateTextilPrices.dat existeix
-    private static void comprobarArxiu() throws IOException {
+    //Comprovar si l'arxiu UpdateTextilPrices.dat existeix sino el crea tant la carpeta com l'arxiu
+    private static void comprobarArxiuUpdate() throws IOException {
         boolean arx = true;
         boolean packkx = true;
 
@@ -296,7 +295,7 @@ class Supermercat {
             }
         } catch (IllegalArgumentException e) {
             System.out.println("Error: " + e.getMessage());
-            escriureExcepcions("Error al metode comprovarArxiu() -->" + e.getMessage());
+            escriureExcepcions("Error al metode comprovarArxiuUpdate() -->" + e.getMessage());
         }
 
         //Si no existeix la carpeta ni l'arxiu, els creara
@@ -306,6 +305,40 @@ class Supermercat {
             System.out.printf("Carpeta creada amb èxit.");
         } if(arx == false){
             File arxiu = new File("updates/UpdateTextilPrices.dat");
+            arxiu.createNewFile();
+            System.out.printf("Arxiu creat amb èxit.");
+        }
+    }
+
+    //Comprovar si l'arxiu Exceptions.dat existeix sino el crea tant la carpeta com l'arxiu
+    private static void comprobarArxiuLog() throws IOException {
+        boolean arx = true;
+        boolean packkx = true;
+
+        try {
+            File arxiu = new File("logs/Exceptions.dat");
+            File pack = new File("logs");
+            //Si la carpeta no esta creada doanra l'error
+            if (!pack.exists()) {
+                arx = false;
+                throw new IllegalArgumentException("La carpeta no existeix.");
+                //Si l'arxiu no esta creat donara l'error
+            } if (!arxiu.exists()) {
+                packkx = false;
+                throw new IllegalArgumentException("L'arxiu no existeix.");
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
+            escriureExcepcions("Error al metode comprovarArxiuLog() -->" + e.getMessage());
+        }
+
+        //Si no existeix la carpeta ni l'arxiu, els creara
+        if(packkx == false){
+            File pack = new File("logs");
+            pack.mkdir();
+            System.out.printf("Carpeta creada amb èxit.");
+        } if(arx == false){
+            File arxiu = new File("logs/Exceptions.dat");
             arxiu.createNewFile();
             System.out.printf("Arxiu creat amb èxit.");
         }
@@ -333,7 +366,7 @@ class Supermercat {
             }
         } catch (IOException e) {
             System.out.println("Error: " + e.getMessage());
-            escriureExcepcions("Error al metode comprovarPreuTextil -->" + e.getMessage());
+            escriureExcepcions("Error al metode comprovarPreuTextil() -->" + e.getMessage());
         }
     }
 
@@ -365,7 +398,7 @@ class Supermercat {
             ae.close();
         } catch (IOException e) {
             System.out.println("Error: " + e.getMessage());
-            escriureExcepcions("Error al metode escriureExcepcions -->" + e.getMessage());
+            escriureExcepcions("Error al metode escriureExcepcions() -->" + e.getMessage());
         }
     }
 }
