@@ -1,3 +1,6 @@
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -58,7 +61,8 @@ class Supermercat {
                     menuTiquet();
             }
         } catch (InputMismatchException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Error: " + e.getMessage());
+            escriureExcepcions("Error al metode menuTiquet() -->" + e.getMessage());
         }
     }
 
@@ -101,7 +105,8 @@ class Supermercat {
                     introduirProducte();
             }
         } catch (InputMismatchException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Error: " + e.getMessage());
+            escriureExcepcions("Error al metode introduirProducte() -->" + e.getMessage());
             }
     }
 
@@ -114,10 +119,10 @@ class Supermercat {
             String nom = sc.nextLine();
 
             // Validació perque el codi de barres tingui 6 caracters
-            System.out.println("Codi de barres: (6 caracters) ");
+            System.out.println("Codi de barres: (Maxim 15 caracters) ");
             String codiBarres = sc.nextLine();
-            if (!codiBarres.matches("^\\d{6}$")) {
-                throw new IllegalArgumentException("El codi de barres ha de tenir 6 caràcters.");
+            if (!codiBarres.matches("^\\d{1,15}$")) {
+                throw new IllegalArgumentException("El codi de barres ha de tenir maxim 15 caràcters.");
             }
 
             // Validació perque el preu no sigui negatiu o 0
@@ -144,9 +149,7 @@ class Supermercat {
 
         } catch (DateTimeParseException | IllegalArgumentException e) {
             System.out.println("Error: " + e.getMessage());
-        } finally {
-            System.out.println("Tornem al menu principal.");
-            menuTiquet();
+            escriureExcepcions("Error al metode introduirAlimentacio -->" + e.getMessage());
         }
     }
 
@@ -159,10 +162,10 @@ class Supermercat {
             String nom = sc.nextLine();
 
             // Validació perque el codi de barres tingui 6 caracters
-            System.out.println("Codi de barres: (6 caracters) ");
+            System.out.println("Codi de barres: (Maxim 15 caracters) ");
             String codiBarres = sc.nextLine();
-            if (!codiBarres.matches("^\\d{6}$")) {
-                throw new IllegalArgumentException("El codi de barres ha de tenir 6 caràcters.");
+            if (!codiBarres.matches("^\\d{1,15}$")) {
+                throw new IllegalArgumentException("El codi de barres ha de tenir maxim 15 caràcters.");
             }
 
             // Validació perque el preu no sigui negatiu o 0
@@ -182,12 +185,9 @@ class Supermercat {
 
         } catch (IllegalArgumentException e) {
             System.out.println("Error: " + e.getMessage());
-        } finally {
-            System.out.println("Tornem al menu principal.");
-            menuTiquet();
+            escriureExcepcions("Error al metode introduirTextil -->" + e.getMessage());
         }
     }
-
 
     //Metode per introduir productes de tipus electrònica
     protected static void introduirElectronica() {
@@ -198,10 +198,10 @@ class Supermercat {
             String nom = sc.nextLine();
 
             // Validació perque el codi de barres tingui 6 caracters
-            System.out.println("Codi de barres: (6 caracters) ");
+            System.out.println("Codi de barres: (Maxim 15 caracters) ");
             String codiBarres = sc.nextLine();
-            if (!codiBarres.matches("^\\d{6}$")) {
-                throw new IllegalArgumentException("El codi de barres ha de tenir 6 caràcters.");
+            if (!codiBarres.matches("^\\d{1,15}$")) {
+                throw new IllegalArgumentException("El codi de barres ha de tenir maxim 15 caràcters.");
             }
 
             // Validació perque el preu no sigui negatiu o 0
@@ -226,13 +226,12 @@ class Supermercat {
 
         } catch (IllegalArgumentException e) {
             System.out.println("Error: " + e.getMessage());
-        } finally {
-            System.out.println("Tornem al menu principal.");
-            menuTiquet();
+            escriureExcepcions("Error al metode introduirElectronica -->" + e.getMessage());
         }
     }
 
     //Opcio2. L'usuari passa per caixa i dona el tiquet.
+    String ruta = "updates/UpdateTextilPrices.dat";
     public static void passarCaixa() {
         System.out.println();
         System.out.println("---------------");
@@ -263,6 +262,10 @@ class Supermercat {
             Producte producte = entry.getKey();
             int quantitat = entry.getValue();
 
+            //Si el producte es de tipus Textil, comprovem el preu.
+            if(producte instanceof Textil){
+                comprovarPreuTextil(producte);
+            }
             System.out.println(producte.getNom() + " -> " + quantitat + " unitat/s -> " + producte.getPreu() + "€/unitat -> " + producte.getPreu() * quantitat + "€");
             total += producte.getPreu() * quantitat;
         }
@@ -273,9 +276,65 @@ class Supermercat {
         //Netejem Arraylist carreto i hashmap carret.
         carreto.clear();
         carret.clear();
+    }
+    //Comprovar si l'arxiu UpdateTextilPrices.dat existeix
+    private static void comprobarArxiu() throws IOException {
+        boolean arx = true;
+        boolean packkx = true;
 
-        //Tornem al menu principal.
-        menuTiquet();
+        try {
+            File arxiu = new File("updates/UpdateTextilPrices.dat");
+            File pack = new File("updates");
+            //Si la carpeta no esta creada doanra l'error
+            if (!pack.exists()) {
+                arx = false;
+                throw new IllegalArgumentException("La carpeta no existeix.");
+            //Si l'arxiu no esta creat donara l'error
+            } if (!arxiu.exists()) {
+                packkx = false;
+                throw new IllegalArgumentException("L'arxiu no existeix.");
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
+            escriureExcepcions("Error al metode comprovarArxiu() -->" + e.getMessage());
+        }
+
+        //Si no existeix la carpeta ni l'arxiu, els creara
+        if(packkx == false){
+            File pack = new File("updates");
+            pack.mkdir();
+            System.out.printf("Carpeta creada amb èxit.");
+        } if(arx == false){
+            File arxiu = new File("updates/UpdateTextilPrices.dat");
+            arxiu.createNewFile();
+            System.out.printf("Arxiu creat amb èxit.");
+        }
+    }
+
+    //Metode per comprovar el preu dels textils al .dat
+    public static void comprovarPreuTextil(Producte p) {
+        try {
+            Scanner sca = new Scanner(new File("updates/UpdateTextilPrices.dat"));
+            //Bucle per llegir les linies de l'arxiu
+            while (sca.hasNextLine()) {
+                //Agafem tota la linea
+                String linia = sca.nextLine();
+                //Separem la linea per les comes
+                String[] parts = linia.split(",");
+                //Fem les variables per guardar els valors
+                String codiBarres = parts[0];
+                int preu = Integer.parseInt(parts[1]);
+
+                //Si el codi de barres del producte es igual al codi de barres de l'arxiu, actualitzem el preu
+                if(codiBarres.equals(p.getCodiBarres())){
+                    p.setPreu(preu);
+
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error: " + e.getMessage());
+            escriureExcepcions("Error al metode comprovarPreuTextil -->" + e.getMessage());
+        }
     }
 
     //Opció3 Mostrar carret de la compra
@@ -296,5 +355,17 @@ class Supermercat {
         carret.forEach((p, q) -> {
             System.out.println(p.getNom() + " -> " + q);
         });
+    }
+
+    //Metode per escriure tots els missatges de excepcions dins del meu arxiu /logs/Exceptions.dat
+    public static void escriureExcepcions(String missatge) {
+        try {
+            FileWriter ae = new FileWriter("logs/Exceptions.dat", true);
+            ae.write(missatge + "\n");
+            ae.close();
+        } catch (IOException e) {
+            System.out.println("Error: " + e.getMessage());
+            escriureExcepcions("Error al metode escriureExcepcions -->" + e.getMessage());
+        }
     }
 }

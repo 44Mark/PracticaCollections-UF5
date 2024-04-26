@@ -23,13 +23,4 @@ public class Textil extends Producte implements Comparable<Textil> {
         // Ordenar per composició
         return this.composicio.compareTo(o.composicio);
     }
-
-    // Comparator per comparar per codi de barres
-    public static class CodiBarresComparator implements Comparator<Textil> {
-        @Override
-        public int compare(Textil t1, Textil t2) {
-            // Comparar por código de barras
-            return t1.getCodiBarres().compareTo(t2.getCodiBarres());
-        }
-    }
 }

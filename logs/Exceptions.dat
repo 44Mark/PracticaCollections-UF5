@@ -1,0 +1,3 @@
+Error al introduir producte electronica: El preu no pot ser negatiu o amb valor 0, torna a provar.
+e.getMessage())
+Error, no pots posar una lletra. Torna a executar el programa.
