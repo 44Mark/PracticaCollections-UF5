@@ -20,7 +20,7 @@ public class Textil extends Producte implements Comparable<Textil> {
     //Comparable per composició
     @Override
     public int compareTo(Textil o) {
-        // Ordenar per composició
+        // Ordenar per ordre alfabetic la composició
         return this.composicio.compareTo(o.composicio);
     }
 }

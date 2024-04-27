@@ -1,8 +1,5 @@
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
-import java.util.Scanner;
+
 
 class Electronica extends Producte {
     int garantia;

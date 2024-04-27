@@ -15,3 +15,8 @@ Error al mètode menuTiquet() -->Error, no pots posar una lletra. Torna a execut
 Error al mètode passarCaixa() -->El carret està buit, no pots passar per caixa sense productes.
 Error al mètode mostrarCarret() -->El carret està buit, no pots mostrar res perque no hi ha productes.
 Error al mètode menuTiquet() -->Error, no pots posar una lletra. Torna a executar el programa.
+Error al mètode passarCaixa() -->El carret està buit, no pots passar per caixa sense productes.
+Error al mètode mostrarCarret() -->El carret està buit, no pots mostrar res perque no hi ha productes.
+Error al mètode passarCaixa() -->El carret està buit, no pots passar per caixa sense productes.
+Error al mètode passarCaixa() -->El carret està buit, no pots passar per caixa sense productes.
+Error al mètode passarCaixa() -->El carret està buit, no pots passar per caixa sense productes.

@@ -28,7 +28,7 @@ class Supermercat {
             System.out.println();
             System.out.println("BENVINGUT AL SAPAMERCAT");
             System.out.println("------------");
-            System.out.println("--INICI---");
+            System.out.println("---INICI---");
             System.out.println("------------");
             System.out.println("Que vols fer?");
             System.out.println();
@@ -66,7 +66,7 @@ class Supermercat {
         }
     }
 
-    //L'user escullira quin tipus de producte vol afegir.
+    //L'usuari escollira quin tipus de producte vol afegir.
     public static void introduirProducte() {
         try{
             System.out.println();
@@ -110,7 +110,7 @@ class Supermercat {
             }
     }
 
-    //mètode per introduir productes de tipus alimentació
+    //Mètode per introduir productes de tipus alimentació
     protected static void introduirAlimentacio() {
         try {
             System.out.println("Omple les següents dades: ");
@@ -118,7 +118,7 @@ class Supermercat {
             System.out.println("Nom producte: ");
             String nom = sc.nextLine();
 
-            // Validació perque el codi de barres tingui 6 caracters
+            // Validació perque el codi de barres tingui maxim 15 caracters
             System.out.println("Codi de barres: (Maxim 15 caracters) ");
             String codiBarres = sc.nextLine();
             if (!codiBarres.matches("^\\d{1,15}$")) {
@@ -155,7 +155,7 @@ class Supermercat {
         }
     }
 
-    //mètode per introduir productes de tipus textil
+    //Mètode per introduir productes de tipus textil
     protected static void introduirTextil() {
         try {
             System.out.println("Omple les següents dades: ");
@@ -163,7 +163,7 @@ class Supermercat {
             System.out.println("Nom producte: ");
             String nom = sc.nextLine();
 
-            // Validació perque el codi de barres tingui 6 caracters
+            // Validació perque el codi de barres tingui maxim 15 caracters
             System.out.println("Codi de barres: (Maxim 15 caracters) ");
             String codiBarres = sc.nextLine();
             if (!codiBarres.matches("^\\d{1,15}$")) {
@@ -201,7 +201,7 @@ class Supermercat {
             System.out.println("Nom producte: ");
             String nom = sc.nextLine();
 
-            // Validació perque el codi de barres tingui 6 caracters
+            // Validació perque el codi de barres tingui maxim 15 caracters
             System.out.println("Codi de barres: (Maxim 15 caracters) ");
             String codiBarres = sc.nextLine();
             if (!codiBarres.matches("^\\d{1,15}$")) {
@@ -254,47 +254,54 @@ class Supermercat {
             // Creem un hashmap anomenat carret per contar quantes vegades surt un producte en el carreto.
             HashMap<Producte, Integer> carret = new HashMap<>();
 
-            // Bucle per trobar el producte en l'ArrayList i actualitzar el carret.
-            for (Producte producte : carreto) {
-                if (carret.containsKey(producte)) {
+            // Bucle per trobar el producte en l'ArrayList i actualitzar el carret(HashMap) i la quantitat.
+            for (Producte p : carreto) {
+                if (carret.containsKey(p)) {
                     // Si el producte esta en el carret, sumem 1
-                    carret.put(producte, carret.get(producte) + 1);
+                    carret.put(p, carret.get(p) + 1);
                 } else {
                     // Si no esta l'afegim a 1.
-                    carret.put(producte, 1);
+                    carret.put(p, 1);
                 }
             }
 
             int total = 0;
             // Bucle per llegir el HashMap i mostrar els detalls del producte.
             for (Map.Entry<Producte, Integer> entry : carret.entrySet()) {
-                Producte producte = entry.getKey();
+                Producte pr = entry.getKey();
                 int quantitat = entry.getValue();
 
                 //Si el producte es de tipus Textil, comprovem el preu.
-                if (producte instanceof Textil) {
-                    comprovarPreuTextil(producte);
+                if (pr instanceof Textil) {
+                    comprovarPreuTextil(pr);
                 }
-                System.out.println(producte.getNom() + " -> " + quantitat + " unitat/s -> " + producte.getPreu() + "€/unitat -> " + producte.getPreu() * quantitat + "€");
-                total += producte.getPreu() * quantitat;
+                System.out.println(pr.getNom() + " -> " + quantitat + " unitat/s -> " + pr.getPreu() + "€/unitat -> " + pr.getPreu() * quantitat + "€");
+                total += pr.getPreu() * quantitat;
             }
 
             System.out.println("---------------");
             System.out.println("Total: " + total + "€");
 
-            //Netejem Hashmap carret.
+            //Netejem Hashmap carret i ArrayList carreto.
             carret.clear();
+            carreto.clear();
+
+            System.out.println();
+            System.out.println("Vols tornar al menú principal? (Si/N)");
+            String resp = sc.nextLine();
+            if (resp.equals("Si")) {
+                menuTiquet();
+            } else {
+                System.out.println("Sortint, moltes gràcies!");
+            }
 
         } catch (IllegalArgumentException e) {
             System.out.println("Error: " + e.getMessage());
             escriureExcepcions("Error al mètode passarCaixa() -->" + e.getMessage());
-        } finally {
-            //Netejem Arraylist carreto.
-            carreto.clear();
         }
-
     }
-        //Comprovar si l'arxiu UpdateTextilPrices.dat existeix sino el crea tant la carpeta com l'arxiu
+
+    //Comprovar si l'arxiu UpdateTextilPrices.dat existeix sino el crea tant la carpeta com l'arxiu
     private static void comprobarArxiuUpdate() throws IOException {
         boolean arx = true;
         boolean packkx = true;
@@ -405,10 +412,20 @@ class Supermercat {
             }
 
             // Mostrar els productes i la quantitat amb lambda
+            System.out.println();
             System.out.println("Carreto de la compra: ");
             carret.forEach((p, q) -> {
                 System.out.println(p.getNom() + " -> " + q);
             });
+
+            System.out.println();
+            System.out.println("Vols tornar al menú principal? (Si/N)");
+            String resp = sc.nextLine();
+            if (resp.equals("Si")) {
+                menuTiquet();
+            } else {
+                System.out.println("Sortint, moltes gràcies!");
+            }
 
         } catch (IllegalArgumentException e) {
             System.out.println("Error: " + e.getMessage());

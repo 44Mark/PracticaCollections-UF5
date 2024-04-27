@@ -9,6 +9,7 @@ class Alimentacio extends Producte {
         super(nom, codiBarres, preu);
         this.dataCaducitat = dataCaducitat;
     }
+
     @Override
     public String getNom() {
         return this.nom;
