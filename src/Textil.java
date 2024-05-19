@@ -23,4 +23,14 @@ public class Textil extends Producte implements Comparable<Textil> {
         // Ordenar per ordre alfabetic la composició
         return this.composicio.compareTo(o.composicio);
     }
+
+    @Override
+    public String toString() {
+        return "Textil{" +
+                "nom='" + nom + '\'' +
+                ", codiBarres='" + codiBarres + '\'' +
+                ", preu=" + preu +
+                ", composicio='" + composicio + '\'' +
+                '}';
+    }
 }
